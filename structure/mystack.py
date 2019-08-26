@@ -1,4 +1,3 @@
-
 class Node(object):
 
     def __init__(self, value=None, prev=None, next=None):
@@ -26,7 +25,7 @@ class CircularDoubleLinkedList(object):
     def tailnode(self):
         return self.root.prev
 
-    def append(self, value):    # O(1), 你发现一般不用 for 循环的就是 O(1)，有限个步骤
+    def append(self, value):  # O(1), 你发现一般不用 for 循环的就是 O(1)，有限个步骤
         if self.maxsize is not None and len(self) >= self.maxsize:
             raise Exception('LinkedList is Full')
         node = Node(value=value)
@@ -42,7 +41,7 @@ class CircularDoubleLinkedList(object):
         if self.maxsize is not None and len(self) >= self.maxsize:
             raise Exception('LinkedList is Full')
         node = Node(value=value)
-        if self.root.next is self.root:   # empty
+        if self.root.next is self.root:  # empty
             node.next = self.root
             node.prev = self.root
             self.root.next = node
@@ -55,13 +54,13 @@ class CircularDoubleLinkedList(object):
             self.root.next = node
         self.length += 1
 
-    def remove(self, node):      # O(1)，传入node 而不是 value 我们就能实现 O(1) 删除
+    def remove(self, node):  # O(1)，传入node 而不是 value 我们就能实现 O(1) 删除
         """remove
         :param node  # 在 lru_cache 里实际上根据key 保存了整个node:
         """
         if node is self.root:
             return
-        else:    #
+        else:  #
             node.prev.next = node.next
             node.next.prev = node.prev
         self.length -= 1
@@ -98,6 +97,7 @@ cir.append(3)
 for i in cir.__iter__():
     print(i)
 
+
 class Deque(CircularDoubleLinkedList):
 
     def pop(self):
@@ -115,6 +115,8 @@ class Deque(CircularDoubleLinkedList):
         value = headnode.value
         self.remove(headnode)
         return value
+
+
 class Stack(object):
     def __init__(self):
         self.deque = Deque()
@@ -124,4 +126,3 @@ class Stack(object):
 
     def pop(self):
         return self.deque.pop()
-
