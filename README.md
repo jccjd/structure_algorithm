@@ -1,4 +1,5 @@
-https://img.shields.io/github/issues/jccjd/structure_algorithm?style=flat-square
+![image](https://img.shields.io/github/issues/jccjd/structure_algorithm?style=flat-square)
+![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
 # structure_algorithm
 个人对数据结构和算法的学习记录和一些理解，主要是一些简单的数据结构和常用算法，
 
@@ -8,7 +9,7 @@ https://img.shields.io/github/issues/jccjd/structure_algorithm?style=flat-square
 #### 线性表
 
     +—---------------+
-    | 1 | 2 | 3 | 4  |
+    | 1  | 2  | 3  | 4  |
     +----------------+
 
 #### 单链表
