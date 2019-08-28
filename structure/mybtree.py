@@ -59,14 +59,64 @@ class Tree(object):
         if node is None:
             return
         self.centeroder(node.lchild)
-        print(node.value, end=' -')
+        print(node.value, end=' ')
         self.centeroder(node.rchild)
+def LRU(node):
+    if node is None:
+        return
+    LRU(node.lchild)
+    LRU(node.rchild)
+    print(node.value, end=" ")
+
+def DLR_no_recursive(node):
+    stack = []
+    while node or stack:
+        while node:
+            print(node.value)
+            stack.append(node)
+            node = node.lchild
+        node = stack.pop()
+        node = node.rchild
+
+def LDR_no_recursive(node):
+    stack = []
+    stack_shadow = []
+    while node or stack:
+        while node:
+            stack.append(node)
+            stack_shadow.append(node)
+            node = node.lchild
+        node = stack.pop()
+        node = node.rchild
+    return stack_shadow
+
+
+def LRD_no_recursive(node):
+    stack = []
+    stack_reverse = []
+    while node or stack:
+        while node:
+            stack.append(node)
+            stack_reverse.append(node)
+            node = node.rchild
+        node = stack.pop()
+        node = node.lchild
+    return stack_reverse[::-1]
 
 a = Tree()
 a.append(1)
 a.append(2)
 a.append(3)
 a.append(4)
+a.append(5)
+a.append(6)
+a.append(7)
 a.breath_oder()
-a.preoder(a.root)
-a.centeroder(a.root)
+
+DLR_no_recursive(a.root)
+dlr = LDR_no_recursive(a.root)
+dlr = [i.value for i in dlr]
+print(dlr)
+lr = LRD_no_recursive(a.root)
+lrdtree = [i.value for i in lr]
+print(lrdtree)
