@@ -153,15 +153,63 @@ category
 遍历第一个节点`1` 输出当前节点的值`1`，将当前节点压栈，当前节点左子节点`2` 成为当前节点，直到将左子节点遍历完，
 
     这时得到打印`[1, 2, 4]` 压入栈中的节点也是`[1, 2, 4]`，跳出小循环
+    
     弹出元素4,4的右子节点为空构不成进入小循环的条件       stack: [1, 2]
-    弹出2, 2的右子节点为5进入小循环,                    stack: [1]
-    将5压入栈中,5无子节点跳出循环                       stack: [1, 5]  print: `[1, 2, 4, 5]`
-    弹出5,5的右子节点为空进入不了小循环,                 stack: [1]
+    弹出2, 2的右子节点为5进入小循环,                   stack: [1]
+    将5压入栈中,5无子节点跳出循环                      stack: [1, 5]  print: `[1, 2, 4, 5]`
+    弹出5,5的右子节点为空进入不了小循环,                stack: [1]
     弹出1，该节点存在左子节点3,进入循环将3压入栈中        stack: [3]     print: `[1, 2, 4, 5, 3]`，
-    3也有左子节点6,输出6将6后在压入栈中，                stack: [3 ,6]  print: `[1, 2, 4, 5, 3, 6]` 
-    6无左子节点出循环，弹出6,6无子节点，                 stack: [3]
-    弹出3,3存在右子节点7,7进入循环输入7,                 stack: [7]     print: `[1, 2, 4, 5, 3, 6, 7]`
+    3也有左子节点6,输出6将6后在压入栈中，               stack: [3 ,6]  print: `[1, 2, 4, 5, 3, 6]` 
+    6无左子节点出循环，弹出6,6无子节点，                stack: [3]
+    弹出3,3存在右子节点7,7进入循环输入7,                stack: [7]     print: `[1, 2, 4, 5, 3, 6, 7]`
     7无子结点跳出循环再弹出7，此时栈空，7无右子节点,结点也为空，跳出大循环，遍历结束。
 
-过程就是这么个过程，主要就是借助一个栈，进行节点的交换，根据先序遍历的规则来选择输出的时机。
+过程就是这么个过程，主要就是借助一个栈，进行节点的交换，根据先序遍历的规则来选择输出的时机。那么这是一个非递归实现先
+序遍历的过程.
+### LDR
+下面的中序遍历和这个代码是一样的只是输出的时机不相同,中序遍历的时候是将每次弹出的节点进行输出，即可以得到中序遍历的过
+程，
+
+    def LDR_no_recursive(self):
+        stack = []
+        curnode = self.root
+        stack_shadow = []
+        while  curnode or stack:
+            while curnode:
+                stack.append(curnode)
+                curnode = curnode.lchild
+            curnode = stack.pop()
+            print(curnode.value, end=' ')
+            curnode = curnode.rchild
+
+### LRD
+后续遍历，首先对一棵树进行后序遍历，将一棵树以根节点为轴进行反转
+
+                    |
+                    1                         1
+                  / | \                     /   \
+                 2  |  3                   3     2
+               /  \ | /  \               /  \   /  \
+              4    5|6    7             7    6 5    4   
+                    |
+      后序：4 5 2 6 7 3 1             先序: 1 3 7 6 2 5 4
+
+可以看到反转后的先序序列是原树的后序序列的反序，那么有了这个特征，在遍历的时候从右子节点开始遍历，遍历事不进行输
+了，在拿一个堆栈将元素存起来，最后将将其反序输出,代码的结构和上面依然保持一致，增加了一个列表和一个输出，而不是直接
+打印，最后输出反序
+    
+    def LRD_no_recursive(self):
+        stack = []
+        stack_shadow = []
+        curnode = self.root
+        while curnode or stack:
+            while curnode:
+                stack.append(curnode)
+                stack_shadow.append(curnode)
+                curnode = curnode.rchild
+            curnode = stack.pop()
+            curnode = curnode.lchild
+        return stack_shadow[::-1]
+以上二叉树的实现和其遍历的过程全部代码如下
+> https://github.com/jccjd/structur_algorithm
 
