@@ -1,2 +1,19 @@
-# structur_algorithm
-structur and algorithm
+# structure_algorithm
+个人对数据结构和算法的学习记录和一些理解，主要是一些简单的数据结构和常用算法，
+
+
+## structure
+### 线性表
+### 单链表
+### 循环双链表
+### 队列
+### 堆栈
+### 二叉树
+
+## algorithm
+### 冒泡排序
+### 插入排序
+### 选择排序
+### 快速排序
+### 希尔排序
+### 归并排序
