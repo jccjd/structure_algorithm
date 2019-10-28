@@ -16,7 +16,7 @@ class LinkedList(object):
         if self.taile is None:
             self.root = node
         else:
-            self.taile = node
+            self.taile.next = node
         self.taile = node
         self.length += 1
 
@@ -32,8 +32,10 @@ class LinkedList(object):
 
 a = LinkedList()
 a.append(1)
-a.append(1)
-a.append(1)
+a.append(2)
+a.append(3)
+
+
 for node in a.iter_node():
     print(node.value)
 

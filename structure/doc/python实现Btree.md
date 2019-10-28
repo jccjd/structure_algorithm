@@ -1,16 +1,12 @@
 ---
 title: python实现单链表
-
 date: 2019-8-27
-
-tags: 
-    - python
+tags:
     - structure
-
-category
+categories:
     - structure
-
 ---
+
 
 ### python实现Btree
 二叉树其实和双链表的结构很像，数据结构书里一般说链表是特殊的树，就是将一颗二叉树一条线下去只有左子节点或只有右子节点，当然最好还是看书详细了解
@@ -24,7 +20,7 @@ category
             self.value = value
             self.lchild = lchild
             self.rchild = rchild
-    
+
 
 ### append & 遍历树
 然后开始对这棵树增加节点，显然应该首先需要`new`一个节点，在初始化的时候定义了一个`self.root = None`，那么在第一次添加节点的时候，根据这个
@@ -44,16 +40,16 @@ category
 值，这里用`2,3`代替一下)
 当再次弹出的时候就是弹出第二个节点输出也就是`2`，然后判断`2`是否有`lchild` or `rchild` 这里显然没有，然后去弹出`3`节点去输出值为3，依然判
 是否有`lchild` or `rchild`，这时队列为空了这个树也遍历完了，那么我们增加的约束条件就是当队空时退出循环。
-    
+
         def breadth_order(self):
             queue = [self.root]
-    
+
             while queue:
                 curnode = queue.pop(0)
                 print(curnode.value)
                 if curnode.lchild is not None:
                     queue.append(curnode.lchild)
-    
+
                 if curnode.rchild is not None:
                     queue.append(curnode.rchild)
 
@@ -74,7 +70,7 @@ category
                 return
             else:
                 queue.append(curnode.lchild)
-                
+
 
             if curnode.rchild is None:
                 curnode.rchild = node
@@ -85,23 +81,23 @@ category
 ### 广度优先搜素
 上面的遍历其实就是二叉树的广度优先搜索，可以看到在增加元素的时候用到了，所以显然，当用广度优先搜索的时候，就是将树的元素按照增加的顺序遍历了一遍
 (为了文档的完整这里还是贴一下代码)
-    
+
            def breadth_order(self):
             queue = [self.root]
-    
+
             while queue:
                 curnode = queue.pop(0)
                 print(curnode.value)
                 if curnode.lchild is not None:
                     queue.append(curnode.lchild)
-    
+
                 if curnode.rchild is not None:
                     queue.append(curnode.rchild)
 
 ### 深度优先搜索
 深度优先有三种方式，先序遍历(DLR),中序遍历(LDR)，后序遍历(LRD)，然后分别的实现有非递归实现，和递归实现，递归实现代码简单，原理怎么说呢，看
 个人理解吧，其实就算理解不了，还是能写出来的,这里直接给出代码，注意一点这里传入的值 node 是根结点，下面会给出测试代码
-    
+
     # 先序遍历
     def DLR_recursion(self, node):
         if node is None:
@@ -109,7 +105,7 @@ category
         print(node.value, end=' ')
         self.DLR_recursion(node.lchild)
         self.DLR_recursion(node.rchild)
-        
+
     # 中序遍历
     def LDR_recursion(self, node):
         if node is None:
@@ -118,7 +114,7 @@ category
         print(node.value, end=' ')
 
         self.LDR_recursion(node.rchild)
-        
+
     # 后序遍历
     def LRD_recursion(self, node):
         if node is None:
@@ -131,13 +127,13 @@ category
 当前节点和栈同时为空，带着空栈和根节点进入循环，然后遍历节点。
 
 > 假设一棵二叉树顺序存入`1-7`
-    
+
                     1
                   /   \
                  2     3
                /  \   /  \
               4    5 6    7
-              
+
           def DLR_no_recursive(self):
             stack = []
             curnode = self.root
@@ -153,13 +149,13 @@ category
 遍历第一个节点`1` 输出当前节点的值`1`，将当前节点压栈，当前节点左子节点`2` 成为当前节点，直到将左子节点遍历完，
 
     这时得到打印`[1, 2, 4]` 压入栈中的节点也是`[1, 2, 4]`，跳出小循环
-    
+
     弹出元素4,4的右子节点为空构不成进入小循环的条件       stack: [1, 2]
     弹出2, 2的右子节点为5进入小循环,                   stack: [1]
     将5压入栈中,5无子节点跳出循环                      stack: [1, 5]  print: `[1, 2, 4, 5]`
     弹出5,5的右子节点为空进入不了小循环,                stack: [1]
     弹出1，该节点存在左子节点3,进入循环将3压入栈中        stack: [3]     print: `[1, 2, 4, 5, 3]`，
-    3也有左子节点6,输出6将6后在压入栈中，               stack: [3 ,6]  print: `[1, 2, 4, 5, 3, 6]` 
+    3也有左子节点6,输出6将6后在压入栈中，               stack: [3 ,6]  print: `[1, 2, 4, 5, 3, 6]`
     6无左子节点出循环，弹出6,6无子节点，                stack: [3]
     弹出3,3存在右子节点7,7进入循环输入7,                stack: [7]     print: `[1, 2, 4, 5, 3, 6, 7]`
     7无子结点跳出循环再弹出7，此时栈空，7无右子节点,结点也为空，跳出大循环，遍历结束。
@@ -197,7 +193,7 @@ category
 可以看到反转后的先序序列是原树的后序序列的反序，那么有了这个特征，在遍历的时候从右子节点开始遍历，遍历事不进行输
 了，在拿一个堆栈将元素存起来，最后将将其反序输出,代码的结构和上面依然保持一致，增加了一个列表和一个输出，而不是直接
 打印，最后输出反序
-    
+
     def LRD_no_recursive(self):
         stack = []
         stack_shadow = []
@@ -212,4 +208,3 @@ category
         return stack_shadow[::-1]
 以上二叉树的实现和其遍历的过程全部代码如下
 > https://github.com/jccjd/structur_algorithm
-

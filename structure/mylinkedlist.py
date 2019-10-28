@@ -131,19 +131,19 @@ class testLinkedlist():
 
     def testremove(self, index):
         list = self.testdate()
-        print('-' * 10, f'test remove index {index}')
+        print('-' * 10, 'test remove index {index}')
         self.printdata(list)
         list.remove(index)
         self.printdata(list)
 
     def testfind(self, index):
         list = self.testdate()
-        print('-' * 10, f'test find index {index}')
+        print('-' * 10, 'test find index {index}')
         self.printdata(list)
         print('find value:', list.find(index).value)
 
     def testreverse(self):
-        print('-' * 10, f'test reverse')
+        print('-' * 10, 'test reverse')
         list = self.testdate()
         self.printdata(list)
         list.reverse()
