@@ -1,15 +1,16 @@
-def binary_search(list,key):
+def binary_search(nums, key):
     start = 0
-    end = len(list)
+    end = len(nums)
     while start < end:
         mid = (start + end) // 2
 
-        if key > list[mid]:
+        if key > nums[mid]:
             start = mid + 1
-        elif key < list[mid]:
-            end = mid -1
+        elif key < nums[mid]:
+            end = mid - 1
         else:
             return mid
 
-list = [1,2,3,4,5]
-print(binary_search(list,1))
+
+nums = [1, 2, 3, 4, 5]
+print(binary_search(nums, 1))
