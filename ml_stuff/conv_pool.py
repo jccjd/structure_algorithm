@@ -4,15 +4,39 @@ import pandas as pd
 import argparse
 
 
-def hello(filename):
-    # 构造数据
-    df = pd.DataFrame({'data': [5, 10, 30, 50, 40, 30, 60]},
-                      index=[11, 22, 42, 83, 94, 111, 333])
+def my_map(x):
+    return x.strftime('%H:%M:%S')
 
-    print(df)
+
+def time_sq(rg_length):
+    pd_date = pd.date_range("2021-1-1", periods=rg_length, freq='1s')
+    pd_date = pd_date.map()
+    return [i.strftime('%H:%M:%S') for i in pd_date]
+
+
+def hello(file_name):
+    # 构造数据
+    list2 = []
+    for lin2 in open(file_name):
+        if lin2.startswith('[SUM]'):
+            sw_str = lin2.strip('[SUM]')
+            list1 = sw_str.split(' ')
+            #
+            # list2.append(list1[3])
+            # list2.append(list1[6])
+            # list2.append(list1[9])
+            list2.append(float(list1[-2]))
+
+    list2_len = len(list2)
+    pd_date = pd.date_range("2021-1-1", periods=list2_len, freq='1s')
+    pd_date = pd_date.map(my_map)
+
+    df = pd.DataFrame({'data': list2},
+                      index=pd_date)
+    # datetime.datetime.now().strftime('%F %H:%M:S')
 
     # 使用XlsxWriter作为引擎创建Excel编写器。
-    writer = pd.ExcelWriter('gairuo.com.xlsx', engine='xlsxwriter')
+    writer = pd.ExcelWriter(file_name.split('.')[0] + '.xlsx', engine='xlsxwriter')
 
     # 将数据框转换为XlsxWriter Excel对象。
     df.to_excel(writer, sheet_name='Sheet1')
@@ -22,15 +46,19 @@ def hello(filename):
     worksheet = writer.sheets['Sheet1']
 
     # 创建图表对象, 类型设置为折线图
-    chart = workbook.add_chart({'type': 'line'})
-
+    chart = workbook.add_chart({'type': 'scatter'})
+    chart.set_size({'width': 1500,
+                    'height': 500})
     # 设置图形的标题
-    chart.set_title({'name': 'Data 的折线图'})
+    chart.set_title({'name': 'Data 点状图'})
     # 从dataframe数据配置图表，指定序列数据区域
+    x = f'=Sheet1!$A$2:$A${len(list2)}'
+    y = f'=Sheet1!$B$2:$B${len(list2)}'
+    print(x)
+    print(y)
     chart.add_series({
-        'categories': '=Sheet1!$A$2:$A$8',  # x轴显示内容
-        'values': '=Sheet1!$B$2:$B$8',
-        'line': {'color': 'red'},  # 线条颜色
+        'categories': x,  # x轴显示内容
+        'values': y,
         'name': 'data',  # 图例名称
     })
 
@@ -42,11 +70,8 @@ def hello(filename):
 
 
 if __name__ == '__main__':
-    print(sys.argv[1])
-    parser = argparse.ArgumentParser(description="Demo of argparse")
-    parser.add_argument('--name', default='Great')
+    parser = argparse.ArgumentParser(description="iperf 数据转表格")
+    parser.add_argument('--path', help='指定处理的文件路径')
 
     args = parser.parse_args()
-
-    print(args.name)
-    hello(args.name)
+    hello('957412-p1.txt')
