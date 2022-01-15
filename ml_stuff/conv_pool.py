@@ -1,17 +1,20 @@
+import datetime
 import sys
 
 import pandas as pd
 import argparse
+
+import xlsxwriter
 
 
 def my_map(x):
     return x.strftime('%H:%M:%S')
 
 
-def time_sq(rg_length):
-    pd_date = pd.date_range("2021-1-1", periods=rg_length, freq='1s')
-    pd_date = pd_date.map()
-    return [i.strftime('%H:%M:%S') for i in pd_date]
+def time_sq(rg_length, send):
+    
+    pd_date = pd.date_range("2021-1-1", periods=rg_length, freq='2s')
+    return [datetime.datetime.strptime(i.strftime('%H:%M:%S'), '%H:%M:%S') for i in pd_date]
 
 
 def hello(file_name):
@@ -28,45 +31,43 @@ def hello(file_name):
             list2.append(float(list1[-2]))
 
     list2_len = len(list2)
-    pd_date = pd.date_range("2021-1-1", periods=list2_len, freq='1s')
-    pd_date = pd_date.map(my_map)
 
-    df = pd.DataFrame({'data': list2},
-                      index=pd_date)
-    # datetime.datetime.now().strftime('%F %H:%M:S')
+    pd_date = time_sq(list2_len)
+    print(pd_date)
+    workbook = xlsxwriter.Workbook(file_name.split('.')[0] + '.xlsx')  # 创建新的excel
 
-    # 使用XlsxWriter作为引擎创建Excel编写器。
-    writer = pd.ExcelWriter(file_name.split('.')[0] + '.xlsx', engine='xlsxwriter')
+    worksheet = workbook.add_worksheet('sheet1')  # 创建新的sheet
 
-    # 将数据框转换为XlsxWriter Excel对象。
-    df.to_excel(writer, sheet_name='Sheet1')
+    headings = ['Time', 'Data']  # 创建表头
+    data = [
+        pd_date,
+        list2,
 
-    # 获取xlsxwriter工作簿和工作表对象。
-    workbook = writer.book
-    worksheet = writer.sheets['Sheet1']
+    ]
+    time_formats = workbook.add_format({'num_format': 'hh:mm:ss'})
+    worksheet.write_row("A1", headings)
+    worksheet.write_column("A2", data[0], time_formats)
+    worksheet.write_column("B2", data[1])
+    chart_col = workbook.add_chart({'type': 'scatter'})
 
-    # 创建图表对象, 类型设置为折线图
-    chart = workbook.add_chart({'type': 'scatter'})
-    chart.set_size({'width': 1500,
-                    'height': 500})
-    # 设置图形的标题
-    chart.set_title({'name': 'Data 点状图'})
-    # 从dataframe数据配置图表，指定序列数据区域
     x = f'=Sheet1!$A$2:$A${len(list2)}'
     y = f'=Sheet1!$B$2:$B${len(list2)}'
-    print(x)
-    print(y)
-    chart.add_series({
-        'categories': x,  # x轴显示内容
-        'values': y,
-        'name': 'data',  # 图例名称
-    })
+    chart_col.set_size({'width': 1500,
+                    'height': 500})
+    chart_col.add_series(
+        {
+            "name": '=sheet1!$B$1',
+            "categories": x,
+            "values": y,
+        }
+    )
+    chart_col.set_title({'name': 'Date 点状图'})
+    chart_col.set_x_axis({'name': "time"})
+    chart_col.set_y_axis({'name': "gb"})
 
-    # 将图表插入工作表，指定图表的位置
-    worksheet.insert_chart('D2', chart)
-
-    # 关闭Excel writer并输出Excel文件
-    writer.save()
+    chart_col.set_style(1)
+    worksheet.insert_chart("D4", chart_col, {'x_offset': 25, 'y_offset': 10})
+    workbook.close()
 
 
 if __name__ == '__main__':
